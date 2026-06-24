@@ -1,11 +1,11 @@
-const CACHE_NAME = "folding-stars-pwa-v10";
+const CACHE_NAME = "folding-stars-v1.0.1";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/apple-touch-icon.png"
+  "./icon-192.png",
+  "./icon-512.png",
+  "./apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {
@@ -30,6 +30,11 @@ self.addEventListener("fetch", event => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
+  if (url.pathname.endsWith("/version.json")) {
+    event.respondWith(fetch(new Request(request, { cache: "no-store" })));
+    return;
+  }
 
   if (request.mode === "navigate") {
     event.respondWith(
